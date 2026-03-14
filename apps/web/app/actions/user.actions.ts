@@ -7,7 +7,7 @@ import internalClient from "clients/internalClient"
 import { COOKIE_ACCESS_TOKEN } from "constants/index"
 
 export async function registerUser({ email, password }: { email: string; password: string }) {
-  const user = await storefrontClient.createUser({ email, password }) // todo: replace this with our client
+  const user = await internalClient.registerUser({ email, password }) 
   return user
 }
 
@@ -19,9 +19,10 @@ export async function loginUser({ email, password }: { email: string; password: 
 
 // For Task 1, you can leave the getCurrentUser() function below as it is. 
 export async function getCurrentUser() {
-  const accessToken = cookies().get(COOKIE_ACCESS_TOKEN)?.value
-  const user = await storefrontClient.getUser(accessToken || "") // we should replace this with our client
-  return user
+  //const accessToken = cookies().get(COOKIE_ACCESS_TOKEN)?.value
+  //const user = await storefrontClient.getUser(accessToken || "") // we should replace this with our client
+  //return user
+  return null
 }
 
 // disregard the updateUser function, someone else is working on it

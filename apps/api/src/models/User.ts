@@ -5,7 +5,18 @@ import bcrypt from 'bcryptjs';
 import { PlatformUser } from "@enterprise-commerce/core/platform/types"
 import openDb from '../db/db';
 
-export const createUser = () => {} // Implement the createUser function
+export const createUser = async (user: PlatformUser): Promise<PlatformUser> => { // Implement the createUser function
+  const db = await openDb();
+  const result = await db.run( 'INSERT INTO users (email, password) VALUES (?, ?)',
+    [user.email, user.password]);
+  await db.close();
+
+  return {
+  id: result.lastID.toString(),
+  email: user.email,
+  password: user.password
+  };
+};
 
 export const findUserById = async (id: string): Promise<PlatformUser | null> => {
   const db = await openDb();
@@ -13,6 +24,15 @@ export const findUserById = async (id: string): Promise<PlatformUser | null> => 
   await db.close();
   return user || null;
 };
+
+export const findUserByEmail = async (email: String): Promise<PlatformUser | null> => {
+  const db = await openDb();
+  const user = await db.get<PlatformUser>('SELECT * FROM users WHERE email = ?', email);
+  await db.close();
+  return user || null;
+};
+
+
 
 /**
  * Compares a plain text password with a hashed password.
